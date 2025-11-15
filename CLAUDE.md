@@ -20,16 +20,20 @@
 ## Overview
 
 ### Project Description
-**meuclaude** (Portuguese for "my Claude") - [Add project description here]
+**meuclaude** (Portuguese for "my Claude") - Um gerenciador de tarefas CLI inteligente, escrito em Python. Perfeito para desenvolvedores que vivem no terminal!
 
 ### Technology Stack
-- **Language:** [To be determined]
-- **Framework:** [To be determined]
-- **Build Tool:** [To be determined]
-- **Package Manager:** [To be determined]
+- **Language:** Python >= 3.8
+- **CLI Framework:** Click >= 8.1.0
+- **Testing:** pytest >= 7.4.0
+- **Package Manager:** pip
+- **Build Tool:** setuptools
 
 ### Project Goals
-[Document the main objectives and goals of this project]
+- Fornecer uma ferramenta CLI rápida e eficiente para gerenciamento de tarefas
+- Demonstrar boas práticas de desenvolvimento Python
+- Servir como exemplo de projeto bem documentado e testado
+- Integração amigável com assistentes de IA
 
 ---
 
@@ -38,8 +42,19 @@
 ```
 meuclaude/
 ├── .git/                  # Git version control
+├── src/                   # Source code
+│   ├── __init__.py
+│   ├── todo_manager.py    # Core task management logic
+│   └── cli.py             # Command-line interface
+├── tests/                 # Unit tests
+│   ├── __init__.py
+│   └── test_todo_manager.py
+├── docs/                  # Additional documentation
+├── .gitignore
 ├── CLAUDE.md             # This file - AI assistant guide
-└── [Other directories to be added as project grows]
+├── README.md             # User documentation
+├── requirements.txt      # Python dependencies
+└── pyproject.toml        # Project configuration
 ```
 
 ### Directory Conventions
@@ -59,11 +74,10 @@ As the project grows, document the purpose of each major directory:
 
 ### Prerequisites
 ```bash
-# List required software and versions
-# Example:
-# - Node.js >= 18.x
-# - Python >= 3.9
-# - etc.
+# Required software and versions:
+# - Python >= 3.8
+# - pip (package installer for Python)
+# - virtualenv (recommended)
 ```
 
 ### Installation Steps
@@ -72,21 +86,21 @@ As the project grows, document the purpose of each major directory:
 git clone http://local_proxy@127.0.0.1:34416/git/vitrine-show/meuclaude
 cd meuclaude
 
-# Install dependencies
-# [Add commands here]
+# Create virtual environment (recommended)
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Setup environment
-# [Add commands here]
+# Install dependencies
+pip install -r requirements.txt
+
+# Install in development mode
+pip install -e .
 ```
 
 ### Environment Variables
-Document required environment variables:
-```bash
-# Example:
-# DATABASE_URL=
-# API_KEY=
-# NODE_ENV=development
-```
+This project does not require environment variables.
+
+Tasks are stored in `~/.meuclaude/todos.json` by default.
 
 ---
 
@@ -169,21 +183,26 @@ Closes #123
 - Follow DRY (Don't Repeat Yourself) principle
 
 #### File Naming
-- Use lowercase with hyphens for file names: `user-service.js`
-- Use PascalCase for class/component files: `UserService.js`
-- Test files: `*.test.js` or `*.spec.js`
+- Use lowercase with underscores for Python files: `todo_manager.py`
+- Use PascalCase for class names: `TodoManager`, `TaskStatus`
+- Test files: `test_*.py`
+- Follow PEP 8 style guide
 
 #### Code Organization
 - Group related functionality together
-- Keep imports organized (external → internal → relative)
-- Export at the bottom of the file (or use named exports inline)
+- Keep imports organized (standard library → third-party → local)
+- Use type hints for function parameters and return values
+- Write docstrings for all public methods and classes
 
 ### Testing Conventions
 
 - Write tests for all new features
-- Maintain test coverage above [X]%
-- Test file location: [Co-located / Separate test directory]
-- Test naming: `describe('Component/Function', () => { it('should...', ...) })`
+- Maintain test coverage above 80%
+- Test file location: Separate `tests/` directory
+- Test naming: `test_<function_name>()` or `test_<description>()`
+- Use pytest fixtures for setup/teardown
+- Run tests with: `pytest`
+- Check coverage with: `pytest --cov=src --cov-report=html`
 
 ### Documentation Standards
 
@@ -253,56 +272,60 @@ Before committing changes, verify:
 
 ### Running the Project
 ```bash
-# Development mode
-# [Add command]
+# After installation, use the CLI:
+meuclaude --help
 
-# Production mode
-# [Add command]
+# Add a task
+meuclaude add "My task"
+
+# List tasks
+meuclaude list
+
+# See all available commands
+meuclaude --help
 ```
 
 ### Running Tests
 ```bash
 # Run all tests
-# [Add command]
+pytest
 
 # Run specific test file
-# [Add command]
+pytest tests/test_todo_manager.py
 
 # Run with coverage
-# [Add command]
+pytest --cov=src --cov-report=html
+
+# View coverage report
+open htmlcov/index.html
 ```
 
-### Building
+### Installing the Package
 ```bash
-# Development build
-# [Add command]
+# Development installation (editable)
+pip install -e .
 
-# Production build
-# [Add command]
+# Production installation
+pip install .
 ```
 
-### Linting and Formatting
+### Code Quality
 ```bash
-# Run linter
-# [Add command]
-
-# Fix linting issues
-# [Add command]
-
-# Format code
-# [Add command]
+# Python has many linting/formatting tools (not yet configured)
+# Future additions could include:
+# - black (code formatter)
+# - flake8 (linter)
+# - mypy (type checker)
+# - isort (import sorter)
 ```
 
-### Database Operations
+### Data Storage
 ```bash
-# Run migrations
-# [Add command]
+# Tasks are stored in JSON format
+# Default location: ~/.meuclaude/todos.json
 
-# Seed database
-# [Add command]
-
-# Reset database
-# [Add command]
+# To reset all data, simply delete the file:
+rm ~/.meuclaude/todos.json
 ```
 
 ---
@@ -311,16 +334,22 @@ Before committing changes, verify:
 
 ### Common Issues
 
-#### Issue: [Common problem]
-**Solution:** [How to fix it]
+#### Issue: Command 'meuclaude' not found
+**Solution:** Make sure you've installed the package with `pip install -e .` and that your virtual environment is activated.
 
-#### Issue: [Another common problem]
-**Solution:** [How to fix it]
+#### Issue: Import errors when running tests
+**Solution:** Install the package in development mode: `pip install -e .`
+
+#### Issue: Permission denied when writing to todos.json
+**Solution:** Check permissions on `~/.meuclaude/` directory. Create it manually if needed: `mkdir -p ~/.meuclaude`
 
 ### Debug Mode
 ```bash
-# Enable debug logging
-# [Add command or environment variable]
+# For debugging, you can check the stored data directly:
+cat ~/.meuclaude/todos.json
+
+# Run Python in interactive mode to test functions:
+python -i -m src.todo_manager
 ```
 
 ### Getting Help
@@ -333,8 +362,11 @@ Before committing changes, verify:
 
 ## Changelog
 
-### Version 1.0.0 - 2025-11-15
-- Initial CLAUDE.md creation
+### Version 0.1.0 - 2025-11-15
+- Initial project creation
+- Implemented core task management functionality
+- Added CLI interface with Click
+- Created comprehensive test suite
 - Established documentation structure
 - Defined AI assistant guidelines
 
@@ -383,11 +415,29 @@ When asked to work on this project:
 
 ### Project-Specific Patterns
 
-[Document common patterns used in this codebase as they emerge]
+1. **Task Status Management**: All task status changes go through `Task.update_status()` which automatically updates the `updated_at` timestamp.
+
+2. **Data Persistence**: The `TodoManager` automatically saves to disk after every modification (add, update, delete). This ensures data is never lost.
+
+3. **ID Assignment**: Task IDs are auto-incremented and never reused, even after deletion.
+
+4. **CLI Design**: Each CLI command is self-contained and creates its own `TodoManager` instance. This ensures commands are stateless.
+
+5. **Emoji Usage**: Status icons are consistently used throughout the application:
+   - ⏳ Pending
+   - 🔄 In Progress
+   - ✅ Completed
+   - ❌ Cancelled
 
 ### Known Gotchas
 
-[Document any quirks, workarounds, or non-obvious behaviors]
+1. **Storage Location**: Tasks are stored in the user's home directory (`~/.meuclaude/`), not in the project directory. This allows the CLI to work from anywhere.
+
+2. **JSON Encoding**: The storage file uses UTF-8 encoding with `ensure_ascii=False` to support Portuguese and other non-ASCII characters properly.
+
+3. **Enum Serialization**: `TaskStatus` is an Enum that must be converted to/from its `.value` when serializing to JSON.
+
+4. **Click Confirmation**: The `delete` and `clear` commands use Click's confirmation prompts for safety.
 
 ---
 
